@@ -67,7 +67,7 @@ class Main:
             if not sub_lt:
                 break
             
-            temp_list = [f'{aud_lt}\{f}' for f in os.listdir(sub_lt) if (self.format_control(f))]
+            temp_list = [f'{sub_lt}\{f}' for f in os.listdir(sub_lt) if (self.format_control(f))]
             info_main_video.update_chanel(temp_list)
 
         self.main_data = info_main_video.info_main_lib

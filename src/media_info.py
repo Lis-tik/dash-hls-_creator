@@ -57,6 +57,7 @@ class Info():
 
     def update_chanel(self, new_data):
         for x in range(len(new_data)):
+            print(new_data[x], 'kk')
             probe = ffmpeg.probe(new_data[x])
             for stream in probe['streams']:
                 if stream['codec_type'] == 'audio':
@@ -89,9 +90,9 @@ class Info():
             summary_message += '\naudio: \n'
             for z in range(len(pth[name]['audio'])):
                 cont = pth[name]['audio'][z]
-                summary_message += f'--{z}.{cont['title']}; language: {cont['language']}; codec_name: {cont['codec_name']}; channels: {cont['channels']}; path: {cont['path']}'
+                summary_message += f'--{z}.{cont['title']}; language: {cont['language']}; codec_name: {cont['codec_name']}; channels: {cont['channels']}; path: {cont['path']}\n'
 
-            summary_message += '\nsubtitle: \n'
+            summary_message += 'subtitle: \n'
             for j in range(len(pth[name]['subtitle'])):
                 cont = pth[name]['subtitle'][j]
                 summary_message += f'--{j}.{cont['title']}; language: {cont['language']}; format: {cont['format']}; path: {cont['path']}\n'
