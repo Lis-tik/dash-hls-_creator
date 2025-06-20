@@ -1,6 +1,7 @@
 import os
 import threading
 from src.media_info import Info
+from pathlib import Path
 
 start_message = 'Github разработчика: https://github.com/Lis-tik/dash-hls-_creator \n' \
 'Данная программа создана для комфортного перекодирования медиа контента под dash (hls). База - ffmpeg\n\n' \
@@ -11,7 +12,7 @@ print(start_message)
 
 class Main:
     def __init__(self):
-        self.global_path = None
+        self.global_path = None 
         self.main_data = None
         self.container_files = None
         self.additionally_audio = []
@@ -19,10 +20,22 @@ class Main:
         self.subtitles_formats = ['.srt', '.ass', '.vtt', '.sub', '.ttml', '.pgs']
 
     def format_control(self, file):
-        for x in self.subtitles_formats:
+        for _ in self.subtitles_formats:
             return any(file.endswith(x) for x in self.subtitles_formats)
+        
+    def master_create(self):
+        for x in range(100):
+            file_path = Path(f"./options/master_{x}.json")
+            if not file_path.exists():
+                with open(file_path, 'w', encoding='utf-8') as file:
+                    file.write('{')
+                    for data in self.main_data[:-1]:
+                        file.write(str(data).replace("'", '"')[1:-1] + ',' + '\n')
+                    file.write(str(self.main_data[-1]).replace("'", '"')[1:-1] + '\n')
+                    file.write('}')
+                break
 
-
+            
 
 
     def start(self):
@@ -33,8 +46,9 @@ class Main:
         elif mode == 2:
             print('Включен режим редактирования готового dash проекта')
 
-    def manual_mode(self):
 
+
+    def manual_mode(self):
 
         self.global_path = input('Шаг №1\nВведите полный путь к основной директории с проектом\n:')
         self.container_files = [f'{self.global_path}\{f}' for f in os.listdir(self.global_path) if (f.endswith('.mkv'))]
@@ -73,6 +87,16 @@ class Main:
         self.main_data = info_main_video.info_main_lib
         print(info_main_video.summary_data(), '\n')
 
+        while True:
+            print('Сборка готова к работе\n1. Старт\n2. Рабочее пространство\n3. Редактировать рабочее пространство')
+            mode_last = int(input(':'))
+            if mode_last == 1:
+                self.master_create()
+            if mode_last == 2:
+                print(info_main_video.summary_data(), '\n')
+            if mode_last == 3:
+                self.master_create()
+    
 
 
 
