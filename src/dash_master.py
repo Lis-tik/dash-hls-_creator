@@ -94,35 +94,6 @@ class ReadyVideoConfiguration:
             else:
                 input = data['name']
 
-            # cmd = [
-            #     'ffmpeg',
-            #     '-i', f'{input}',
-
-            #     # выбираем нужную аудиодорожку
-            #     '-map', f'0:a:{x}',
-
-            #     # кодек и параметры
-            #     '-c:a', 'aac',
-            #     '-b:a', '128k',
-            #     '-sn',  # без субтитров
-            #     '-vn',  # без видео
-
-            #     '-fflags', '+genpts',
-            #     '-avoid_negative_ts', 'make_zero',
-
-            #     # формат DASH
-            #     '-f', 'dash',
-            #     '-seg_duration', str(self.segment_time),  # длительность сегмента в секундах
-            #     '-use_timeline', '1',
-            #     '-use_template', '1',
-
-            #     # шаблоны имен
-            #     '-init_seg_name', 'init.mp4',                          # инициализационный сегмент
-            #     '-media_seg_name', 'segment_$Number%05d$.m4s',         # аудиосегменты
-
-            #     # выходной mpd-файл
-            #     f"{global_path}/converted/series_{data['index']}/audio/{name}/output.mpd"
-            # ]
             cmd = [
                 'ffmpeg',
                 '-i', f'{input}',
