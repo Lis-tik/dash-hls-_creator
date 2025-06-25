@@ -3,22 +3,31 @@ import threading
 import json
 import os
 
-from dash_master import start_dash_converted
+from src.dash_master import ReadyVideoConfiguration
+
+
+
+
+def edit_workspace(content):
+    print(content)
+
 
 def start_converted():
-    main_data_list = []
+    queue_list = []
 
     config_list = [f for f in os.listdir('./options') if f.endswith('.json')]
 
     for index in config_list:
         with open(f'./options/{index}', 'r', encoding='utf-8') as file:
             data = json.load(file)
-            main_data_list.append(data)
+            queue_list.append(data)
+
+    
+    video_coder = ReadyVideoConfiguration()
+    for x in queue_list[0]:
+        for y in queue_list[0][x]:
+            video_coder.start(x, y)
 
 
-    for data in main_data_list:
-        start_dash_converted(data)
+# start_converted()
 
-
-
-start_converted()

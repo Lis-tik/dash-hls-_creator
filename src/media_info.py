@@ -7,6 +7,7 @@ class Info():
         self.info_main_lib = []
         self.conteg = {}
         self.debug_message = ''
+        self.global_path = ''
 
 
     def data_debug(self):
@@ -22,52 +23,68 @@ class Info():
                 else:
                     self.debug_message += f'В медиа пространстве ({content}) есть дорожки с одинаковым именем!'
 
+    def edit_workspace(self):
+        print('Вы в режиме редактирования\nНажмите [ENTER] для выхода')
+        mode = int(input('Выберете номер медиа, которое хотите редактировать\nВведите (-1), чтобы выбрать ВСЕ медия\n:'))
+        correct = input('Внесите корректировки\n\nФормат: тип данных в медиа/номер дорожки/параметр/новое значение\nПример: audio/0/title/new_name\n:').split('/')
+        if mode == -1:
+            for x in range(len(self.info_main_lib[self.global_path])):
+                self.info_main_lib[self.global_path][x][correct[0]][int(correct[1])][correct[2]] = correct[3]
+        else:
+            self.info_main_lib[self.global_path][mode][correct[0]][int(correct[1])][correct[2]] = correct[3]
+                
+
+        
 
 
-    def start_getinfo(self, container):
+
+    def start_getinfo(self, container, global_path):
         self.container = container
+        self.global_path = global_path
 
+        self.info_main_lib = {global_path: []}
         for x in range(len(self.container)):
             name_path = self.container[x]
 
-            self.conteg = {name_path: {
+            self.conteg = {
+                'name': name_path,
+                'index': x+1,
                 'video': [],
                 'audio': [],
                 'subtitle': []
-                }}
+                }
             
             probe = ffmpeg.probe(name_path)
             for stream in probe['streams']:
 
                 if stream['codec_type'] == 'video':
                     video_data_add = self.video_info(stream)
-                    self.conteg[name_path]['video'].append(video_data_add)
+                    self.conteg['video'].append(video_data_add)
 
                 if stream['codec_type'] == 'audio':
                     audio_data_add = self.audio_info(stream)
-                    self.conteg[name_path]['audio'].append(audio_data_add)
+                    self.conteg['audio'].append(audio_data_add)
 
                 if stream['codec_type'] == 'subtitle':
                     subtitle_data_add = self.subtitle_info(stream)
-                    self.conteg[name_path]['subtitle'].append(subtitle_data_add)
+                    self.conteg['subtitle'].append(subtitle_data_add)
 
-            self.info_main_lib.append(self.conteg)
+            self.info_main_lib[global_path].append(self.conteg)
 
 
 
     def update_chanel(self, new_data):
         for x in range(len(new_data)):
-            print(new_data[x], 'kk')
             probe = ffmpeg.probe(new_data[x])
             for stream in probe['streams']:
                 if stream['codec_type'] == 'audio':
 
                     new_audio_chanel = self.audio_info(stream, new_data[x])
-                    self.info_main_lib[x][self.container[x]]['audio'].append(new_audio_chanel)
+                    self.info_main_lib[self.global_path][x]['audio'].append(new_audio_chanel)
 
                 if stream['codec_type'] == 'subtitle':
                     new_subtitle_chanel = self.subtitle_info(stream, new_data[x])
-                    self.info_main_lib[x][self.container[x]]['subtitle'].append(new_subtitle_chanel)
+                    self.info_main_lib[self.global_path][x]['subtitle'].append(new_subtitle_chanel)
 
 
         # if len(os.listdir(aud_lt)) < len(self.main_data):
@@ -77,25 +94,26 @@ class Info():
     def summary_data(self):
         summary_message = f'Всего файлов: {len(self.info_main_lib)}\n'
 
-        for x in range(len(self.info_main_lib)):
+        pass_role = self.info_main_lib[self.global_path]
+        for x in range(len(pass_role)):
 
-            pth = self.info_main_lib[x]
-            name = list(pth.keys())[0]
-            summary_message += f'{x+1}.{name}: \n'
+            pth = pass_role[x]
+
+            summary_message += f'{x+1}.{pth['name']}: \n'
 
             summary_message += 'video: '
-            for y in pth[name]['video']:
+            for y in pth['video']:
                 summary_message += f'{y['width']}x{y['height']}; pix_fmt: {y['pix_fmt']}'
 
             summary_message += '\naudio: \n'
-            for z in range(len(pth[name]['audio'])):
-                cont = pth[name]['audio'][z]
-                summary_message += f'--{z}.{cont['title']}; language: {cont['language']}; codec_name: {cont['codec_name']}; channels: {cont['channels']}; path: {cont['path']}\n'
+            for z in range(len(pth['audio'])):
+                cont = pth['audio'][z]
+                summary_message += f'--{z}. title: {cont['title']}; language: {cont['language']}; codec_name: {cont['codec_name']}; channels: {cont['channels']}; path: {cont['path']}\n'
 
             summary_message += 'subtitle: \n'
-            for j in range(len(pth[name]['subtitle'])):
-                cont = pth[name]['subtitle'][j]
-                summary_message += f'--{j}.{cont['title']}; language: {cont['language']}; format: {cont['format']}; path: {cont['path']}\n'
+            for j in range(len(pth['subtitle'])):
+                cont = pth['subtitle'][j]
+                summary_message += f'--{j}. title: {cont['title']}; language: {cont['language']}; format: {cont['format']}; path: {cont['path']}\n'
 
             summary_message += '\n'
             
