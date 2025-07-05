@@ -32,3 +32,5 @@ cd python-dash-packager
 
 # Install dependencies
 pip install lxml
+
+#ffmpeg must be downloaded from the official website and added to your system's PATH, because the program runs commands using subprocess!
