@@ -26,8 +26,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/Lis-tik/dash-hls-_creator.git
-cd python-dash-packager
+git clone https://github.com/Lis-tik/AutoDash.git
+cd AutoDash
 
 
 # Install dependencies
