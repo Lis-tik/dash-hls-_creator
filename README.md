@@ -22,3 +22,13 @@
 - [lxml](https://lxml.de/) — must be installed and added to your `PATH`
 
 
+## 📦 Installation
+
+```bash
+# Clone the repository
+git clone [repository](https://github.com/Lis-tik/dash-hls-_creator.git)
+cd python-dash-packager
+
+
+# Install dependencies
+pip install lxml
