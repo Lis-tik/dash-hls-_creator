@@ -19,7 +19,7 @@
 
 - Python >= 3.8
 - [ffmpeg](https://ffmpeg.org/) — must be installed and added to your `PATH`
-- [lxml](https://lxml.de/) — must be installed and added to your `PATH`
+- [lxml](https://lxml.de/) — It can be installed via `pip`
 
 
 ## 📦 Installation
