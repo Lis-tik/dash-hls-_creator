@@ -26,7 +26,7 @@
 
 ```bash
 # Clone the repository
-git clone [repository](https://github.com/Lis-tik/dash-hls-_creator.git)
+git clone https://github.com/Lis-tik/dash-hls-_creator.git
 cd python-dash-packager
 
 
